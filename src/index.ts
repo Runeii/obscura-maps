@@ -28,6 +28,14 @@ export default {
 
     const country = url.searchParams.get('country');
     const isExporting = url.searchParams.get('isExporting');
+    const authToken = url.searchParams.get('authToken');
+
+    if (authToken !== env.AUTH_TOKEN) {
+      return new Response('Unauthorized', {
+        status: 401,
+        headers: { 'content-type': 'text/plain' },
+      });
+    }
 
     if (url.href.includes('favicon.ico')) {
       return new Response('', {
