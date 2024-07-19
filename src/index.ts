@@ -45,7 +45,7 @@ export default {
     }
 
     if (isExporting) {
-      const result = await env.EXPORTER.fetch('https://obscura-maps--exporter.workerify.workers.dev/?country=france&isExporting=true');
+      const result = await env.EXPORTER.fetch(`https://obscura-maps--exporter.workerify.workers.dev/?country=${country}&isExporting=true`);
       return result;
     }
 
