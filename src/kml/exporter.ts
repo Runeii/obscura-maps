@@ -80,11 +80,13 @@ const handleRequest = async (request, env) => {
 
   const keys = await OBSCURA_MAPS.list();
 
+  const global = url.searchParams.get('global') === 'true';
+
   const items: Item[] = await Promise.all(keys.keys.map(key => {
     if (key.name.includes('CATEGORIES_')) {
       return null;
     }
-    if (!key.name.includes(`${country}--`)) {
+    if (!global && !key.name.includes(`${country}--`)) {
       return null;
     }
     return OBSCURA_MAPS.get(key.name, 'json');
