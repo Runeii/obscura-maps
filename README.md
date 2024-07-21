@@ -2,6 +2,8 @@
 
 This is a small project that exports listings from travel website [Atlas Obscura](https://www.atlasobscura.com) as a Google Maps compatible KML file. This can then be imported in to [Google My Maps](https://www.google.com/maps/d/) to provide a personal Google Map of sites of interest in a country, categorised and with images.
 
+A Google Map is generally a better navigation UI and format for mobile exploration when travelling.
+
 In general this project functioned as a quick refresher in how to write a Cloudflare Worker in the new ESM structure/after a year without doing so.
 
 ## Example output
