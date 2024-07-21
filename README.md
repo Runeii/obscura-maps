@@ -1,9 +1,8 @@
-# Cloudflare Workers OpenAPI 3.1
+# Atlas Obscura -> Google Maps exporter
 
-This is a Cloudflare Worker with OpenAPI 3.1 using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono).
+This is a small project that exports listings from travel website [Atlas Obscura](https://www.atlasobscura.com) as a Google Maps compatible KML file. This can then be imported in to [Google My Maps](https://www.google.com/maps/d/) to provide a personal Google Map of sites of interest in a country, categorised and with images.
 
-This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
-`openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
+In general this project functioned as a quick refresher in how to write a Cloudflare Worker in the new ESM structure/after a year without doing so.
 
 ## Get started
 
@@ -11,15 +10,7 @@ This is an example project made to be used as a quick start into building OpenAP
 2. Clone this project and install dependencies with `npm install`
 3. Run `wrangler login` to login to your Cloudflare account in wrangler
 4. Run `wrangler deploy` to publish the API to Cloudflare Workers
-
-## Project structure
-
-1. Your main router is defined in `src/index.ts`.
-2. Each endpoint has its own file in `src/endpoints/`.
-3. For more information read the [chanfana documentation](https://chanfana.pages.dev/) and [Hono documentation](https://hono.dev/docs).
-
-## Development
-
-1. Run `wrangler dev` to start a local instance of the API.
-2. Open `http://localhost:8787/` in your browser to see the Swagger interface where you can try the endpoints.
-3. Changes made in the `src/` folder will automatically trigger the server to reload, you only need to refresh the Swagger interface.
+5. Make sure to add an AUTH_TOKEN env variable on Cloudflare
+6. Visit myworker.com/?country=[COUNTRY OF INTEREST]&authToken=[AUTH TOKEN]
+7. The script will begin working and refresh the page intermittently to avoid overrunning the worker CPU time.
+8. After a few minutes a KML file will be downloaded
