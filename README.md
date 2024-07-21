@@ -4,6 +4,9 @@ This is a small project that exports listings from travel website [Atlas Obscura
 
 In general this project functioned as a quick refresher in how to write a Cloudflare Worker in the new ESM structure/after a year without doing so.
 
+## Example output
+[An example map of France can be found here.](https://www.google.com/maps/d/edit?mid=1Wg9-fmaBZi9G8B3y845gJSxLTsRP0A0&ll=39.22025571104992,4.960365052722011&z=5)
+
 ## Get started
 
 1. Sign up for [Cloudflare Workers](https://workers.dev). The free tier is more than enough for most use cases.
