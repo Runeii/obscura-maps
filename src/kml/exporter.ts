@@ -79,7 +79,7 @@ const handleRequest = async (request, env) => {
   const categoriesMap = Object.fromEntries(categories.map(category => [category.id, category.name]));
 
   const keys = await OBSCURA_MAPS.list();
-
+console.log('keys', keys);
   const global = url.searchParams.get('global') === 'true';
 
   const items: Item[] = await Promise.all(keys.keys.map(key => {
@@ -91,14 +91,15 @@ const handleRequest = async (request, env) => {
     }
     return OBSCURA_MAPS.get(key.name, 'json');
   })).then(items => items.filter(item => item !== null));
-
-  const itemsByCategory = items.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
-    acc[item.category].push(item);
-    return acc;
-  }, {});
+console.log('items', items);
+const itemsByCategory = items.reduce((acc, item) => {
+  if (!acc[item.category]) {
+    acc[item.category] = [];
+  }
+  acc[item.category].push(item);
+  return acc;
+}, {});
+console.log('itemsByCategory', itemsByCategory);
 
   // merge ruins and churches
   if (itemsByCategory['sacred-spaces']) {
@@ -120,6 +121,8 @@ const handleRequest = async (request, env) => {
     categoriesMap['history'] = 'History & Statues';
     delete itemsByCategory['statues'];
   }
+
+  console.log('categoriesMap', categoriesMap);
   const kml = createKML(itemsByCategory, categoriesMap);
 
   return new Response(kml, {
