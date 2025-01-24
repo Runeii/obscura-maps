@@ -71,9 +71,11 @@ function createKML(items: { [key: string]: Item[] }, categoriesMap: { [key: stri
 }
 
 const handleRequest = async (request, env) => {
+  console.log('Exporting KML');
   const url = new URL(request.url);
+  console.log('url', url);
   const country = url.searchParams.get('country');
-
+console.log('country', country);
   const { OBSCURA_MAPS } = env;
   let categories = await getCategories(country, env);
   const categoriesMap = Object.fromEntries(categories.map(category => [category.id, category.name]));
