@@ -45,6 +45,7 @@ export default {
     }
 
     if (isExporting) {
+      console.log('fIRING EXPORT WORKER')
       const result = await env.EXPORTER.fetch(`https://obscura-maps--exporter.workerify.workers.dev/?country=${country}&isExporting=true`);
       return result;
     }
