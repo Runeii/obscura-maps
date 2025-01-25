@@ -75,13 +75,16 @@ const handleRequest = async (request, env) => {
   const url = new URL(request.url);
   console.log('url', url);
   const country = url.searchParams.get('country');
-console.log('country', country);
+
+  console.log('country', country);
   const { OBSCURA_MAPS } = env;
   let categories = await getCategories(country, env);
   const categoriesMap = Object.fromEntries(categories.map(category => [category.id, category.name]));
 
-  const keys = await OBSCURA_MAPS.list();
-console.log('keys', keys);
+  const keys = await OBSCURA_MAPS.list({
+    prefix: 'japan--'
+  });
+
   const global = url.searchParams.get('global') === 'true';
 
   const items: Item[] = await Promise.all(keys.keys.map(key => {
@@ -93,7 +96,8 @@ console.log('keys', keys);
     }
     return OBSCURA_MAPS.get(key.name, 'json');
   })).then(items => items.filter(item => item !== null));
-console.log('items', items);
+
+console.log('number of items', items.length);
 const itemsByCategory = items.reduce((acc, item) => {
   if (!acc[item.category]) {
     acc[item.category] = [];
@@ -101,30 +105,40 @@ const itemsByCategory = items.reduce((acc, item) => {
   acc[item.category].push(item);
   return acc;
 }, {});
-console.log('itemsByCategory', itemsByCategory);
+console.log('itemsByCategory', Object.keys(itemsByCategory));
 
   // merge ruins and churches
   if (itemsByCategory['sacred-spaces']) {
-    itemsByCategory['ruins'] = itemsByCategory['ruins'].concat(itemsByCategory['sacred-spaces']);
+    itemsByCategory['ruins'] = [
+      ...(itemsByCategory['ruins'] || []),
+      ...(itemsByCategory['sacred-spaces'] || [])
+    ]
+
     categoriesMap['ruins'] = 'Ruins & Churches';
     delete itemsByCategory['sacred-spaces'];
   }
 
   // merge homes and architecture
   if (itemsByCategory['homes']) {
-    itemsByCategory['architecture'] = itemsByCategory['architecture'].concat(itemsByCategory['homes']);
+    itemsByCategory['architecture'] = [
+      ...(itemsByCategory['architecture'] || []),
+      ...(itemsByCategory['homes'] || [])
+    ]
     categoriesMap['architecture'] = 'Architecture & Homes';
     delete itemsByCategory['homes'];
   }
 
   // merge statues and history
   if (itemsByCategory['statues']) {
-    itemsByCategory['history'] = itemsByCategory['history'].concat(itemsByCategory['statues']);
+    itemsByCategory['history'] = [
+      ...(itemsByCategory['history'] || []),
+      ...(itemsByCategory['statues'] || [])
+    ]
     categoriesMap['history'] = 'History & Statues';
     delete itemsByCategory['statues'];
   }
 
-  console.log('categoriesMap', categoriesMap);
+  console.log('categoriesMap', Object.keys(categoriesMap));
   const kml = createKML(itemsByCategory, categoriesMap);
 
   return new Response(kml, {
